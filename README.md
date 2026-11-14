@@ -42,6 +42,17 @@ import './src/diorama-switch.js';
 
 想加第九间房，照 `src/rooms/archive.js` 复制一份改参数，再在 `src/rooms/index.js` 里 `import` 一行即可 —— 不用碰引擎。
 
+
+## 单文件版本
+
+`dist/diorama-switch.html` 是一个 350 KB 的独立页面：组件、八间房、样式、图片全部内嵌，双击就能开，不用服务器、不用联网。
+
+```bash
+python3 build/bundle.py     # 重新生成 dist/diorama-switch.html
+```
+
+它也是唯一一个能直接挂到任何静态空间（对象存储、Pages、OSS）就能用的形态。
+
 ## 示例
 
 跑起来之后看 `examples/index.html`，五个场景，都是同一行标签：

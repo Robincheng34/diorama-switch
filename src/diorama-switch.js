@@ -99,7 +99,9 @@ class DioramaSwitch extends HTMLElement {
     this._built = true;
     const root = this.attachShadow({ mode: 'open' });
     root.innerHTML = `
-      <link rel="stylesheet" href="${CSS_URL}">
+      ${CSS_URL
+        ? `<link rel="stylesheet" href="${CSS_URL}">`
+        : `<style>${(window.__DIORAMA_CSS__ || '')}</style>`}
       <div class="sw" part="switch" role="switch" aria-checked="false" tabindex="0">
         <span class="sw-shell" part="shell"></span>
         <span class="sw-step" part="step"></span>
