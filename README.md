@@ -85,4 +85,8 @@ python3 -m http.server 8080
 
 ## License
 
-MIT © 2026
+**GPL-3.0**（GNU General Public License v3.0）© 2026 Robincheng34
+
+用它、改它、商用都可以，但**分发衍生作品时必须以同样许可证开源**，
+并保留版权与许可声明。若你的产品要闭源，这个许可不合适 —— 需要另谈授权。
+完整文本见 [LICENSE](./LICENSE)。
