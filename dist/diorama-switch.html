@@ -185,10 +185,14 @@ class DioramaSwitch extends HTMLElement {
       this.dataset.roomSpec = r.spec || '';
       /* 图解码完再让场景淡进来，避免首屏先黑一下 */
       this._sw.classList.remove('scene-ready');
-      const probe = new Image();
-      probe.onload = () => this._sw && this._sw.classList.add('scene-ready');
-      probe.onerror = () => this._sw && this._sw.classList.add('scene-ready');
-      probe.src = r.image;
+      const ready = () => this._sw && this._sw.classList.add('scene-ready');
+      clearTimeout(this._probeT);
+      /* 兜底：图慢或解码失败也别让场景一直藏着 */
+      this._probeT = setTimeout(ready, 1200);
+      this._probe = new Image();              /* 必须留引用，否则可能被回收而丢 onload */
+      this._probe.onload = ready;
+      this._probe.onerror = ready;
+      this._probe.src = r.image;
     }
     if (name === 'height'){
       const h = this._num(this.getAttribute('height'), 0);
