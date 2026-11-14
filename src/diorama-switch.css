@@ -105,6 +105,7 @@
 .sw-room{
   position: absolute; inset: 0;
   background-image: var(--room);
+  opacity: 0; transition: opacity .42s ease-out;
   background-size: 104% auto;
   background-position: 50% 52%;
   transform: translate3d(calc((var(--p) - .5) * 7%), 0, 0);
@@ -182,3 +183,6 @@
   .sw-shell{transition:none}
   .sw-ball{transform:none}
 }
+
+/* 贴图就位后淡入（JS 给 .sw 加 .scene-ready） */
+.sw.scene-ready .sw-room{ opacity: 1; }

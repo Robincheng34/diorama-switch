@@ -88,6 +88,12 @@ class DioramaSwitch extends HTMLElement {
       if (r.accent) this.style.setProperty('--accent', r.accent);
       this.dataset.roomName = r.name;
       this.dataset.roomSpec = r.spec || '';
+      /* 图解码完再让场景淡进来，避免首屏先黑一下 */
+      this._sw.classList.remove('scene-ready');
+      const probe = new Image();
+      probe.onload = () => this._sw && this._sw.classList.add('scene-ready');
+      probe.onerror = () => this._sw && this._sw.classList.add('scene-ready');
+      probe.src = r.image;
     }
     if (name === 'height'){
       const h = this._num(this.getAttribute('height'), 0);
