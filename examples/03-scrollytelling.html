@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>示例 03 · 滚动就是一整天</title>
+<style>
+  :root{--bg:#0A0C16;--ink:#E8E7EE;--muted:#7E849F;--hair:rgba(232,231,238,.13)}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.75 "Noto Serif CJK SC",Georgia,serif}
+  .head{min-height:62vh;display:flex;flex-direction:column;justify-content:center;padding:0 clamp(24px,6vw,110px)}
+  .kicker{font:11px/1 "DejaVu Sans Mono",monospace;letter-spacing:.22em;color:var(--muted);margin-bottom:18px}
+  h1{font-size:clamp(30px,4.4vw,54px);line-height:1.1;margin:0 0 14px;letter-spacing:-.01em}
+  .head p{max-width:30em;color:var(--muted);margin:0}
+  .runway{height:180vh;position:relative}
+  .sticky{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px}
+  .readout{font:12px/1.7 "DejaVu Sans Mono",monospace;color:var(--muted);letter-spacing:.1em;text-align:center}
+  .readout b{display:block;font-size:clamp(26px,3.4vw,40px);color:var(--ink);letter-spacing:-.01em}
+  .readout b small{font-size:.44em;color:var(--muted);margin-left:.4em}
+  .tail{min-height:70vh;display:flex;flex-direction:column;justify-content:center;padding:0 clamp(24px,6vw,110px)}
+  .tail p{max-width:32em;color:var(--muted)}
+  code{font-family:"DejaVu Sans Mono",monospace;color:#C9CCDA}
+</style>
+</head>
+<body>
+<div class="head">
+  <div class="kicker">SCROLLYTELLING / 03</div>
+  <h1>往下滚，<br>光自己走完一天。</h1>
+  <p>这一段的滚动进度直接写成开关的 <code>value</code>。没有缓动，没有入场动画 —— 你滚多少，天就暗多少。</p>
+</div>
+
+<div class="runway" id="runway">
+  <div class="sticky">
+    <diorama-switch id="sw" room="greenhouse" height="280" value="0"></diorama-switch>
+    <div class="readout">
+      <b><span id="lux">3 200</span><small>LX</small></b>
+      <span id="when">06:40 · 窗朝东</span>
+    </div>
+  </div>
+</div>
+
+<div class="tail">
+  <p>驱动只有一行：<code>sw.value = progress</code>。同一个进度变量同时喂给贴图的 <code>filter</code>、紫黑压暗、暖光池和球的位移 —— 四件事共用一个数，所以中间没有一帧是断的。</p>
+</div>
+
+<script type="module">
+  import '../src/diorama-switch.js';
+  const sw = document.getElementById('sw');
+  const runway = document.getElementById('runway');
+  const luxEl = document.getElementById('lux'), whenEl = document.getElementById('when');
+
+  const fmtLux = p => (3200 * Math.pow(8 / 3200, p)).toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, '$1 ');
+  const fmtTime = p => {
+    const m = Math.round(400 + (1335 - 400) * p);
+    return String(Math.floor(m/60)).padStart(2,'0') + ':' + String(m%60).padStart(2,'0')
+         + (p > .5 ? ' · 灯已亮' : ' · 窗朝东');
+  };
+
+  let raf = 0;
+  const onScroll = () => {
+    if (raf) return;
+    raf = requestAnimationFrame(() => {
+      raf = 0;
+      const r = runway.getBoundingClientRect();
+      const travel = r.height - innerHeight;
+      const p = Math.max(0, Math.min(1, -r.top / Math.max(1, travel)));
+      sw.value = p;                       /* 只有一个数 */
+      luxEl.textContent = fmtLux(p);
+      whenEl.textContent = fmtTime(p);
+    });
+  };
+  addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+</script>
+</body>
+</html>

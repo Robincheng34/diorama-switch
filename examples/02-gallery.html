@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>示例 02 · 一枚开关，八个房间</title>
+<style>
+  :root{--bg:#0A0C16;--ink:#E8E7EE;--muted:#7E849F;--accent:#FFB25C;--hair:rgba(232,231,238,.13)}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.7 "Noto Serif CJK SC",Georgia,serif;padding:clamp(24px,4vw,64px)}
+  .wrap{max-width:1080px;margin:0 auto}
+  h1{font-size:clamp(26px,3.4vw,40px);margin:0 0 6px;letter-spacing:-.01em}
+  h1 em{font-style:normal;color:var(--accent)}
+  .sub{color:var(--muted);font:12px/1.8 "DejaVu Sans Mono",monospace;letter-spacing:.1em;margin:0 0 34px}
+  .stage{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(22px,4vw,54px);align-items:center}
+  .list{list-style:none;margin:0;padding:0;border-top:1px solid var(--hair)}
+  .list li{display:flex;align-items:center;gap:14px;padding:11px 4px;border-bottom:1px solid var(--hair);cursor:pointer;transition:background .2s}
+  .list li:hover{background:rgba(255,255,255,.03)}
+  .list img{width:52px;height:34px;object-fit:cover;border-radius:3px;filter:saturate(.9)}
+  .list b{font-weight:500;font-size:15px;display:block}
+  .list small{font:10px/1.6 "DejaVu Sans Mono",monospace;letter-spacing:.09em;color:var(--muted)}
+  .list .k{margin-left:auto;font:10.5px "DejaVu Sans Mono",monospace;color:var(--muted)}
+  .cap{margin-top:12px;font:11px/1.9 "DejaVu Sans Mono",monospace;letter-spacing:.08em;color:var(--muted)}
+  @media(max-width:760px){.stage{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>同一枚开关，<em>八个房间</em></h1>
+  <p class="sub">点击行换房间 · 拖球换昼夜 · 每间房只是两张贴图加四个坐标</p>
+  <div class="stage">
+    <diorama-switch id="sw" room="work" height="260" value="0"></diorama-switch>
+    <div>
+      <ul class="list" id="list"></ul>
+      <div class="cap"><span id="name">工作间</span> · <span id="spec">5600K · 窗朝东 · 12㎡</span></div>
+    </div>
+  </div>
+</div>
+<script type="module">
+  import { ROOMS } from '../src/diorama-switch.js';
+  const sw = document.getElementById('sw');
+  const list = document.getElementById('list');
+  const nameEl = document.getElementById('name'), specEl = document.getElementById('spec');
+
+  ROOMS.forEach((r, i) => {
+    const li = document.createElement('li');
+    li.innerHTML = `<img src="${r.image}" alt=""><div><b>${r.name}</b><small>${r.spec}</small></div>
+                    <span class="k">${String(i+1).padStart(2,'0')}</span>`;
+    li.addEventListener('click', () => {
+      sw.room = r.id;                       /* 换房间：一行代码 */
+      nameEl.textContent = r.name; specEl.textContent = r.spec;
+      [...list.children].forEach(x => x.style.background = '');
+      li.style.background = 'rgba(255,255,255,.05)';
+    });
+    list.appendChild(li);
+  });
+</script>
+</body>
+</html>

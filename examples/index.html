@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>示例 · diorama-switch</title>
+<style>
+  :root{--bg:#0A0C16;--ink:#E8E7EE;--muted:#7E849F;--accent:#FFB25C;--hair:rgba(232,231,238,.12)}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.75 "Noto Serif CJK SC",Georgia,serif;padding:clamp(26px,5vw,72px)}
+  .wrap{max-width:1040px;margin:0 auto}
+  .kicker{font:11px/1 "DejaVu Sans Mono",monospace;letter-spacing:.22em;color:var(--muted)}
+  h1{font-size:clamp(28px,4vw,46px);margin:.4em 0 .3em;letter-spacing:-.01em}
+  .lead{color:var(--muted);max-width:34em;margin:0 0 2.2em}
+  .list{border-top:1px solid var(--hair)}
+  a.item{display:flex;align-items:center;gap:22px;padding:22px 6px;border-bottom:1px solid var(--hair);text-decoration:none;color:inherit}
+  a.item:hover{background:rgba(255,255,255,.03)}
+  a.item .n{font:11px "DejaVu Sans Mono",monospace;color:var(--muted);width:34px}
+  a.item b{font-weight:500;font-size:17px}
+  a.item small{display:block;color:var(--muted);font-size:13px;margin-top:3px}
+  a.item .go{margin-left:auto;font:11px "DejaVu Sans Mono",monospace;color:var(--muted);letter-spacing:.14em}
+  footer{margin-top:2.4em;font:11px/1.8 "DejaVu Sans Mono",monospace;letter-spacing:.14em;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kicker">EXAMPLES / 示例</div>
+  <h1>五个场景，同一枚开关</h1>
+  <p class="lead">从 88px 的设置项到 300px 的首屏主视觉，都是同一个组件、同一行标签。</p>
+
+  <div class="list">
+    <a class="item" href="01-settings-row.html">
+      <span class="n">01</span>
+      <div><b>设置项里的一行</b><small>88px · 四行开关并排，最小可用尺寸</small></div>
+      <span class="go">打开 →</span>
+    </a>
+    <a class="item" href="02-gallery.html">
+      <span class="n">02</span>
+      <div><b>一枚开关，八个房间</b><small>点列表换房间：sw.room = 'cyber'</small></div>
+      <span class="go">打开 →</span>
+    </a>
+    <a class="item" href="03-scrollytelling.html">
+      <span class="n">03</span>
+      <div><b>滚动就是一整天</b><small>滚动进度直接写成 value，不走缓动</small></div>
+      <span class="go">打开 →</span>
+    </a>
+    <a class="item" href="04-sizes.html">
+      <span class="n">04</span>
+      <div><b>从 44 到 280，同一枚开关</b><small>四档尺寸对照，宽度永远 1.82 倍</small></div>
+      <span class="go">打开 →</span>
+    </a>
+    <a class="item" href="05-landing-band.html">
+      <span class="n">05</span>
+      <div><b>落地页里的一块</b><small>嵌进普通页面，不改布局</small></div>
+      <span class="go">打开 →</span>
+    </a>
+  </div>
+
+  <footer>需要本地服务器：python3 -m http.server 8080</footer>
+</div>
+</body>
+</html>

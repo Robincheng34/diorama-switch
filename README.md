@@ -42,6 +42,18 @@ import './src/diorama-switch.js';
 
 想加第九间房，照 `src/rooms/archive.js` 复制一份改参数，再在 `src/rooms/index.js` 里 `import` 一行即可 —— 不用碰引擎。
 
+## 示例
+
+跑起来之后看 `examples/index.html`，五个场景，都是同一行标签：
+
+| 示例 | 场景 | 看点 |
+|---|---|---|
+| [01 设置项里的一行](examples/01-settings-row.html) | 88px，四行并排 | 最小可用尺寸下房间退成一条色带 |
+| [02 一枚开关，八个房间](examples/02-gallery.html) | 点列表换房 | `sw.room = 'cyber'` 一行换世界 |
+| [03 滚动就是一整天](examples/03-scrollytelling.html) | 滚动驱动 | `sw.value = 滚动进度`，不走缓动 |
+| [04 从 44 到 280](examples/04-sizes.html) | 四档尺寸对照 | 宽度永远 1.82×高度 |
+| [05 落地页里的一块](examples/05-landing-band.html) | 嵌进普通页面 | 不改布局，直接摆在文案旁边 |
+
 ## API
 
 | 属性 / 方法 | 说明 |

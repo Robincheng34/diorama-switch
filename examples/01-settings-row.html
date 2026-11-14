@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>示例 01 · 设置项里的一行开关</title>
+<style>
+  :root{--bg:#0A0C16;--card:#12141F;--ink:#E8E7EE;--muted:#7E849F;--hair:rgba(232,231,238,.13)}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--bg);color:var(--ink);
+       font:15px/1.7 "Noto Serif CJK SC","Songti SC",Georgia,serif;padding:36px}
+  .panel{width:min(560px,100%);background:var(--card);border:1px solid var(--hair);border-radius:14px;padding:6px 0}
+  .hd{display:flex;justify-content:space-between;align-items:baseline;padding:16px 22px 10px;
+      font:11px/1 "DejaVu Sans Mono",monospace;letter-spacing:.2em;color:var(--muted)}
+  .row{display:flex;align-items:center;gap:16px;padding:14px 22px;border-top:1px solid var(--hair)}
+  .row:first-of-type{border-top:0}
+  .row .txt{flex:1}
+  .row b{display:block;font-weight:500;font-size:15.5px}
+  .row small{display:block;font:10.5px/1.7 "DejaVu Sans Mono",monospace;letter-spacing:.1em;color:var(--muted);margin-top:2px}
+  .cap{margin-top:22px;max-width:560px;font-size:13px;color:var(--muted)}
+  .cap code{font-family:"DejaVu Sans Mono",monospace;color:#C9CCDA}
+</style>
+</head>
+<body>
+<div>
+  <div class="panel">
+    <div class="hd"><span>显示与亮度</span><span>SETTINGS / 08</span></div>
+    <div class="row">
+      <div class="txt"><b>夜间模式</b><small>22:15 — 06:40</small></div>
+      <diorama-switch room="sound" height="88" value="1"></diorama-switch>
+    </div>
+    <div class="row">
+      <div class="txt"><b>原彩显示</b><small>随环境光调整</small></div>
+      <diorama-switch room="work" height="88" value="0"></diorama-switch>
+    </div>
+    <div class="row">
+      <div class="txt"><b>自动亮度</b><small>灯光环路环</small></div>
+      <diorama-switch room="archive" height="88" value="0.8"></diorama-switch>
+    </div>
+    <div class="row">
+      <div class="txt"><b>停用时间</b><small>就寝前 30 分钟</small></div>
+      <diorama-switch room="rest" height="88" value="1"></diorama-switch>
+    </div>
+  </div>
+  <p class="cap">88px 是它的最小可用尺寸：视窗只有 80px 高，房间退成一条色带，球缩成一个反光点 —— 这时候正确的做法是把场景「看清」降到「认出」，只保留色温与灯位。<br>尺寸写在 <code>height="88"</code>，宽度自动按 1.82:1 算成 160px。</p>
+</div>
+<script type="module" src="../src/diorama-switch.js"></script>
+</body>
+</html>
