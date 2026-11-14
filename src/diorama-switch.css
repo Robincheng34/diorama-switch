@@ -1,0 +1,181 @@
+/* ============================================================
+   <diorama-switch> —— 一枚装着房间的开关
+   ------------------------------------------------------------
+   四层结构：
+     ① 壳   外唇口 → 台阶 → 视窗井，三段剖面（马路牙子式）
+     ② 视窗 16:9 贴图，随球视差平移
+     ③ 昼夜 单一进度变量 --p（0 = 06:40 清晨，1 = 22:15 深夜）
+     ④ 球   硼硅玻璃折射球，既是滑块也是透镜，液态形变
+   ============================================================ */
+
+:host{
+  --h: 220px;                    /* 由 height 属性写入 */
+  --w: calc(var(--h) * 1.82);    /* 胶囊长宽比 */
+  --r-pill: calc(var(--h) * .5);
+  --pad: calc(var(--h) * .045);  /* 壳厚：只留一圈亮边 */
+  --d: calc(var(--h) * .82);     /* 球径：几乎顶满视窗高 */
+  --p: 0;                        /* 昼夜进度 0→1 */
+  --q: 0;                        /* 液态：拉伸量 */
+  --pr: 0;                       /* 液态：按压量 */
+  --gx: 46%; --gy: 52%;          /* 灯的位置 */
+  --wx: 15%; --wy: 44%;          /* 窗的方向 */
+
+  display: inline-block;
+  width: var(--w);
+  height: var(--h);
+  vertical-align: middle;
+}
+
+.sw{
+  position: relative;
+  display: block;
+  width: 100%; height: 100%;
+  border-radius: var(--r-pill);
+  isolation: isolate;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+  cursor: grab;
+  outline: none;
+}
+.sw:active{cursor:grab}
+.sw:focus-visible{outline:1px dashed rgba(255,255,255,.5);outline-offset:calc(var(--h)*.06)}
+
+/* ① 壳：外唇口最高 */
+.sw-shell{
+  position: absolute; inset: 0;
+  border-radius: var(--r-pill);
+  background:
+    radial-gradient(120% 130% at 46% -30%, #FFFFFF 0%, #FDFDFE 30%, rgba(253,253,254,0) 62%),
+    linear-gradient(180deg,#FFFFFF 0%,#FAFBFD 16%,#EDF0F6 42%,#D8DCE7 68%,#C0C6D5 86%,#AFB6C7 95%,#E6E9F1 100%);
+  box-shadow:
+    0 calc(var(--h)*.08) calc(var(--h)*.2) calc(var(--h)*-.055) rgba(3,5,14,.8),
+    0 calc(var(--h)*.02) calc(var(--h)*.046) calc(var(--h)*-.014) rgba(3,5,14,.52),
+    inset 0 calc(var(--h)*.012) calc(var(--h)*.02) rgba(255,255,255,.98),
+    inset 0 calc(var(--h)*-.008) calc(var(--h)*.014) rgba(255,255,255,.9),
+    inset 0 0 0 calc(var(--h)*.002) rgba(255,255,255,.9),
+    0 0 0 1px rgba(8,12,26,.14);
+  filter: brightness(calc(1 - .26 * var(--p)));
+  transition: filter .2s linear;
+}
+/* 唇口那道亮脊：光落在圆弧顶部，往下缘就淡掉 */
+.sw-shell::before{
+  content: ""; position: absolute; inset: calc(var(--h)*.010);
+  border-radius: calc(var(--h)*.5 - var(--h)*.010);
+  box-shadow:
+    0 0 0 calc(var(--h)*.0022) rgba(255,255,255,.95),
+    0 0 calc(var(--h)*.010) rgba(255,255,255,.40),
+    0 calc(var(--h)*.003) 0 rgba(255,255,255,.55),
+    inset 0 0 0 1px rgba(150,162,184,.30);
+  -webkit-mask: linear-gradient(180deg,#000 0%,#000 52%,rgba(0,0,0,.55) 82%,rgba(0,0,0,.18) 100%);
+          mask: linear-gradient(180deg,#000 0%,#000 52%,rgba(0,0,0,.55) 82%,rgba(0,0,0,.18) 100%);
+}
+
+/* ② 台阶：比唇口低一级，硬分界 + 唇口投下来的影 */
+.sw-step{
+  position: absolute; inset: calc(var(--pad)*.52);
+  border-radius: calc(var(--h)*.5 - var(--pad)*.52);
+  pointer-events: none;
+  background: linear-gradient(180deg,#F4F6FB 0%,#E3E7F0 24%,#D1D7E3 56%,#B9C1D0 84%,#DDE2EC 100%);
+  box-shadow:
+    0 calc(var(--h)*.005) calc(var(--h)*.009) rgba(6,10,22,.34),
+    0 0 0 1px rgba(10,14,28,.18),
+    inset 0 calc(var(--h)*.004) 0 rgba(255,255,255,.9),
+    inset 0 calc(var(--h)*-.004) 0 rgba(255,255,255,.5);
+}
+
+/* ③ 视窗井：最低，房间在里面 */
+.sw-lens{
+  position: absolute; inset: var(--pad);
+  border-radius: calc(var(--h)*.42);
+  overflow: hidden;
+  background: #0B0D18;
+  box-shadow:
+    inset 0 calc(var(--h)*.045) calc(var(--h)*.085) calc(var(--h)*-.028) rgba(4,6,16,.92),
+    inset 0 calc(var(--h)*.006) 0 rgba(6,8,18,.7),
+    inset 0 0 0 1px rgba(6,8,18,.6),
+    inset 0 0 calc(var(--h)*.032) calc(var(--h)*.019) rgba(4,6,16,.55),
+    inset 0 calc(var(--h)*-.028) calc(var(--h)*.055) rgba(255,255,255,.22),
+    0 0 0 calc(var(--h)*.004) rgba(255,255,255,.34);
+}
+
+/* 场景贴图：跟着球横向平移 7%，制造视差 */
+.sw-room{
+  position: absolute; inset: 0;
+  background-image: var(--room);
+  background-size: 104% auto;
+  background-position: 50% 52%;
+  transform: translate3d(calc((var(--p) - .5) * 7%), 0, 0);
+  filter:
+    brightness(calc(1 - .2 * var(--p)))
+    contrast(calc(1 + .22 * var(--p)))
+    saturate(calc(1 - .14 * var(--p)));
+  will-change: transform, filter;
+}
+/* 夜：一层紫黑压上去，只留家具轮廓 */
+.sw-dusk{
+  position: absolute; inset: 0; opacity: var(--p);
+  background:
+    radial-gradient(120% 85% at 50% -6%, rgba(44,32,86,.5), transparent 68%),
+    linear-gradient(180deg,#3A3064 0%,#2A2350 55%,#1B1638 100%);
+  mix-blend-mode: multiply;
+}
+/* 亮着的灯：暖光池落在桌面，窗那边留一点冷光 */
+.sw-lamp{
+  position: absolute; inset: 0; opacity: var(--p);
+  background:
+    radial-gradient(circle at var(--gx) var(--gy),
+      rgba(255,222,168,.95) 0%, rgba(255,170,88,.5) 7%, rgba(255,140,64,.2) 17%, transparent 34%),
+    radial-gradient(circle at var(--gx) var(--gy),
+      rgba(255,170,92,.3) 0%, transparent 26%),
+    radial-gradient(circle at var(--wx) var(--wy),
+      rgba(104,140,255,.26) 0%, transparent 30%);
+  mix-blend-mode: screen;
+}
+/* 视窗上的一层薄反光 */
+.sw-sheen{
+  position: absolute; inset: 0; pointer-events: none; opacity: .7;
+  background:
+    linear-gradient(104deg, rgba(255,255,255,.16) 0%, rgba(255,255,255,0) 22%),
+    radial-gradient(90% 60% at 82% 4%, rgba(255,255,255,.16), transparent 60%);
+  mix-blend-mode: screen;
+}
+
+/* ④ 折射球：既是滑块，也是透镜；液态形变 */
+.sw-ball{
+  position: absolute;
+  top: calc(50% - var(--d) / 2);
+  left: calc(var(--p) * (100% - var(--d)));
+  width: var(--d); height: var(--d);
+  border-radius: 50%;
+  backdrop-filter: blur(calc(var(--d)*.011)) saturate(1.28) brightness(1.02) contrast(1.3);
+  -webkit-backdrop-filter: blur(calc(var(--d)*.011)) saturate(1.28) brightness(1.02) contrast(1.3);
+  background:
+    radial-gradient(circle at 33% 24%, rgba(255,255,255,.95) 0%, rgba(255,255,255,.22) 4%, transparent 12%),
+    radial-gradient(circle at 50% 50%, rgba(206,224,255,.02) 0%, rgba(16,22,44,.04) 58%, rgba(8,10,22,.18) 100%);
+  box-shadow:
+    inset 0 0 0 calc(var(--d)*.008) rgba(255,255,255,.3),
+    inset calc(var(--d)*-.012) calc(var(--d)*-.018) calc(var(--d)*.05) rgba(255,255,255,.16),
+    0 calc(var(--d)*.045) calc(var(--d)*.1) calc(var(--d)*-.025) rgba(4,6,16,.4);
+  transform-origin: 50% 62%;
+  transform:
+    translateY(calc(var(--pr) * var(--d) * .026))
+    scaleX(calc(1 + var(--q) + var(--pr) * .05))
+    scaleY(calc(1 - var(--q) * .84 - var(--pr) * .08));
+  will-change: left, transform;
+}
+.sw-ball::before{
+  content: ""; position: absolute; left: 16%; top: 10%;
+  width: 30%; height: 5%; border-radius: 50%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent);
+  filter: blur(calc(var(--d)*.02));
+  transform: rotate(-16deg); opacity: .7;
+}
+.sw-ball::after{
+  content: ""; position: absolute; inset: 0; border-radius: 50%;
+  box-shadow: inset 0 calc(var(--d)*-.01) calc(var(--d)*.035) rgba(255,255,255,.22);
+}
+
+@media (prefers-reduced-motion: reduce){
+  .sw-shell{transition:none}
+  .sw-ball{transform:none}
+}

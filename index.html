@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>一间房，一枚开关 · diorama-switch</title>
+<style>
+  :root{
+    --canvas:#0A0C16; --ink:#E8E7EE; --muted:#7E849F; --accent:#FFB25C;
+    --hair:rgba(232,231,238,.12);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    background:var(--canvas); color:var(--ink);
+    font:15px/1.75 "Noto Serif CJK SC","Songti SC",Georgia,serif;
+    padding:clamp(24px,5vw,72px);
+  }
+  .wrap{max-width:1240px;margin:0 auto}
+  .kicker{font:11px/1 "DejaVu Sans Mono",ui-monospace,monospace;letter-spacing:.22em;color:var(--muted);text-transform:uppercase}
+  h1{font-size:clamp(34px,5vw,62px);line-height:1.08;margin:.35em 0 .2em;letter-spacing:-.01em}
+  h1 em{font-style:normal;color:var(--accent)}
+  .lead{max-width:34em;color:var(--muted);margin:0 0 2.2em}
+  .hero-row{display:flex;flex-wrap:wrap;align-items:center;gap:clamp(20px,4vw,56px);margin:0 0 2.6em}
+  .readout{font:12px/1.9 "DejaVu Sans Mono",ui-monospace,monospace;color:var(--muted);letter-spacing:.08em}
+  .readout b{display:block;font-size:clamp(22px,3vw,34px);color:var(--ink);letter-spacing:-.01em}
+  .readout b small{font-size:.5em;color:var(--muted);margin-left:.35em}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1px;background:var(--hair);border:1px solid var(--hair);margin:2.4em 0}
+  .cell{background:var(--canvas);padding:clamp(18px,2.4vw,30px);display:flex;flex-direction:column;gap:16px}
+  .cell .name{font-size:17px;letter-spacing:.02em}
+  .cell .spec{font:10.5px/1.6 "DejaVu Sans Mono",ui-monospace,monospace;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+  .cell p{margin:0;font-size:13px;line-height:1.7;color:var(--muted)}
+
+  pre{background:#11141F;border:1px solid var(--hair);border-radius:2px;padding:18px 20px;overflow:auto;font-size:12.5px;line-height:1.8;color:#C9CCDA}
+  pre,code{font-family:"DejaVu Sans Mono",ui-monospace,monospace}
+  .note{font-size:12.5px;color:var(--muted);margin-top:10px}
+  footer{margin-top:3em;padding-top:1.4em;border-top:1px solid var(--hair);display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;font:11px/1.7 "DejaVu Sans Mono",ui-monospace,monospace;letter-spacing:.14em;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="kicker">DIORAMA SWITCH / 微缩景观开关</div>
+  <h1>一间房，<em>一枚开关</em></h1>
+  <p class="lead">八间 1:12 的等距微缩房间，八种光的性格。拖动那枚玻璃球：球走到哪里，光就跟到哪里 —— 白天它替房间向城市借光，入夜只剩一盏灯。每一个都是独立组件。</p>
+
+  <div class="hero-row">
+    <diorama-switch id="hero" room="work" height="300" value="0"></diorama-switch>
+    <div class="readout">
+      <b><span id="lux">3 200</span><small>LX</small></b>
+      <span id="when">06:40 · 窗朝东</span>
+    </div>
+  </div>
+
+  <div class="kicker">八间房 / 各自一个组件</div>
+  <div class="grid" id="grid"></div>
+
+  <div class="kicker">用法</div>
+<pre>&lt;!-- 引入一次，注册元素；八间房随包注册 --&gt;
+&lt;script type="module" src="./src/diorama-switch.js"&gt;&lt;/script&gt;
+
+&lt;!-- 用哪一间，写哪个 room --&gt;
+&lt;diorama-switch room="cyber" height="260"&gt;&lt;/diorama-switch&gt;
+
+&lt;!-- 只要一间房：只 import 那一个文件 --&gt;
+&lt;script type="module"&gt;
+  import "./src/rooms/garden.js";
+  import "./src/diorama-switch.js";
+&lt;/script&gt;</pre>
+  <p class="note">属性：<code>room</code> 房间 id · <code>height</code> 高度 px（宽度按 1.82:1 自动算）· <code>value</code> 0–1 昼夜进度。方法：<code>toggle()</code> / <code>animateTo(v, ms)</code>。事件：<code>diorama-change</code>。无障碍：<code>role="switch"</code> + <code>aria-checked</code>，键盘 Space / Enter / ← / →。</p>
+
+  <footer>
+    <span>CAPSULE 1.82 : 1 · LIQUID SPRING</span>
+    <span>MIT LICENSE · 2026</span>
+  </footer>
+</div>
+
+<script type="module">
+  import './src/diorama-switch.js';
+  import { ROOMS } from './src/diorama-switch.js';
+
+  /* 八个房间，各自一个组件实例 */
+  const grid = document.getElementById('grid');
+  for (const r of ROOMS){
+    const cell = document.createElement('div');
+    cell.className = 'cell';
+    cell.innerHTML = `
+      <div>
+        <div class="name">${r.name}</div>
+        <div class="spec">${r.spec}</div>
+      </div>
+      <diorama-switch room="${r.id}" height="132" value="0"></diorama-switch>
+      <p>${r.desc || ''}</p>`;
+    grid.appendChild(cell);
+  }
+
+  /* 首屏读数 */
+  const hero = document.getElementById('hero');
+  const luxEl = document.getElementById('lux');
+  const whenEl = document.getElementById('when');
+  const fmtLux = p => (3200 * Math.pow(8 / 3200, p)).toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, '$1 ');
+  const fmtTime = p => {
+    const m = Math.round(400 + (1335 - 400) * p);
+    const hh = String(Math.floor(m / 60)).padStart(2, '0');
+    const mm = String(m % 60).padStart(2, '0');
+    return hh + ':' + mm + (p > .5 ? ' · 灯已亮' : ' · 窗朝东');
+  };
+  hero.addEventListener('diorama-change', e => {
+    const p = e.detail.value;
+    luxEl.textContent = fmtLux(p);
+    whenEl.textContent = fmtTime(p);
+  });
+</script>
+</body>
+</html>
