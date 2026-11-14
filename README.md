@@ -1,4 +1,8 @@
-# diorama-switch · 一间房，一枚开关
+# diorama-switch
+
+> 一枚装着 1:12 微缩房间的胶囊开关。拖动那颗硼硅玻璃球，房间跟着视差平移，昼夜由同一个 `--p` 驱动。
+
+**[→ 线上演示](https://robincheng34.github.io/diorama-switch/)** ｜ **[示例与八间房实例](https://robincheng34.github.io/diorama-switch/examples/)** ｜ **[单文件版](https://github.com/Robincheng34/diorama-switch/blob/main/dist/diorama-switch.html)**
 
 一枚装着房间的开关。胶囊里是一间 1:12 的等距微缩房间，玻璃球既是滑块也是透镜：
 球走到哪里，光就跟到哪里 —— 白天它替房间向城市借光，入夜只剩一盏灯。
