@@ -1,3 +1,9 @@
+/* diorama-switch · 一间房，一枚开关
+   Copyright (C) 2026 Robincheng34
+
+   本程序是自由软件：你可以依据自由软件基金会发布的 GNU 通用公共许可证
+   第三版（或任何更新版本）的条款重新分发和/或修改它。完整条款见 LICENSE。
+*/
 /* 房间注册表：每个房间文件只做一件事 —— 把自己登记进来 */
 const registry = new Map();
 
