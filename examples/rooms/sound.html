@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>声音间 · diorama-switch 实例</title>
+<style>
+  :root{--bg:#0A0C16;--ink:#E8E7EE;--muted:#7E849F;--accent:#FFB25C;--hair:rgba(232,231,238,.12)}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);
+       font:15px/1.8 "Noto Serif CJK SC","Songti SC",Georgia,serif;
+       display:flex;flex-direction:column;justify-content:center;
+       padding:clamp(28px,5vw,84px)}
+  .wrap{max-width:1120px;margin:0 auto;width:100%}
+  .top{display:flex;justify-content:space-between;align-items:baseline;
+        font:11px/1 "DejaVu Sans Mono",monospace;letter-spacing:.2em;color:var(--muted);margin-bottom:clamp(30px,6vh,72px)}
+  .stage{display:grid;grid-template-columns:auto minmax(0,1fr);gap:clamp(26px,5vw,70px);align-items:center}
+  .meta h1{font-size:clamp(30px,4.2vw,54px);line-height:1.08;margin:0 0 10px;letter-spacing:-.01em}
+  .meta .spec{font:11px/1.9 "DejaVu Sans Mono",monospace;letter-spacing:.16em;color:var(--accent);margin-bottom:20px}
+  .meta p{max-width:26em;color:var(--muted);margin:0 0 26px}
+  .kv{display:flex;gap:34px;flex-wrap:wrap;font:10.5px/1.9 "DejaVu Sans Mono",monospace;letter-spacing:.12em;color:var(--muted)}
+  .kv b{display:block;color:var(--ink);font-size:14px;letter-spacing:0;margin-bottom:2px}
+  pre{margin:30px 0 0;background:#11141F;border:1px solid var(--hair);border-radius:2px;
+       padding:16px 18px;font:12px/1.9 "DejaVu Sans Mono",monospace;color:#C9CCDA;overflow:auto}
+  .nav{display:flex;justify-content:space-between;margin-top:clamp(30px,6vh,64px);
+        padding-top:16px;border-top:1px solid var(--hair);
+        font:11px/1.8 "DejaVu Sans Mono",monospace;letter-spacing:.12em;color:var(--muted)}
+  .nav a{color:var(--muted);text-decoration:none} .nav a:hover{color:var(--accent)}
+  @media(max-width:820px){.stage{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><span>DIORAMA SWITCH / 实例</span><span>02 / 08</span></div>
+  <div class="stage">
+    <diorama-switch room="sound" height="300" value="0"></diorama-switch>
+    <div class="meta">
+      <h1>声音间</h1>
+      <div class="spec">2700K · 台灯在右 · 8㎡</div>
+      <p>李子紫吸音墙上挂满唱片，整间房只有一盏灯亮着。</p>
+      <div class="kv">
+        <div><b>79%</b>灯位 X</div>
+        <div><b>54%</b>灯位 Y</div>
+        <div><b>13%</b>窗 X</div>
+        <div><b>40%</b>窗 Y</div>
+      </div>
+    </div>
+  </div>
+
+<pre>&lt;/&gt; 只引这一间房
+import '../src/rooms/sound.js';        // 只注册 声音间
+import '../src/diorama-switch.js';
+
+&lt;diorama-switch room="sound" height="300"&gt;&lt;/diorama-switch&gt;</pre>
+
+  <div class="nav">
+    <a href="./work.html">← 工作间</a>
+    <a href="../index.html">全部示例 ↑</a>
+    <a href="./rest.html">休息间 →</a>
+  </div>
+</div>
+<script type="module">
+  import '../../src/rooms/sound.js';
+  import '../../src/diorama-switch.js';
+</script>
+</body>
+</html>
